@@ -35,7 +35,6 @@ private:
         return nullptr;
     }
 
-    // Hàm tìm cha của một node
     Node* findParent(Node* node, const string& name) {
         for (Node* child : node->children) {
             if (child->name == name) {
@@ -49,7 +48,6 @@ private:
         return nullptr;
     }
 
-    // Hàm cập nhật lại số trang sau khi xóa một mục
     void updatePagesAfterDeletion(Node* node) {
         for (Node* child : node->children) {
             int page_diff = child->end_page - child->start_page;
@@ -60,12 +58,10 @@ private:
     }
 
 public:
-    // Constructor khởi tạo cuốn sách với tên và trang bắt đầu
     Book(string title) {
-        root = new Node(title, 1, 100);  // Ví dụ cuốn sách có tên và trang từ 1 đến 100
+        root = new Node(title, 1, 100);  
     }
 
-    // Thêm một mục vào cây
     void addSection(const string& parentName, const string& name, int start_page, int end_page) {
         Node* parent = findNode(root, parentName);
         if (parent != nullptr) {
@@ -74,12 +70,10 @@ public:
         }
     }
 
-    // Đếm số chương trong cuốn sách
     int countChapters() {
         return root->children.size();
     }
 
-    // Tìm chương dài nhất trong cuốn sách
     string findLongestChapter() {
         Node* longestChapter = nullptr;
         int maxPages = 0;
@@ -93,26 +87,22 @@ public:
         return longestChapter != nullptr ? longestChapter->name : "";
     }
 
-    // Xóa một mục và cập nhật lại số trang
     void deleteSection(const string& name) {
         Node* parent = findParent(root, name);
         if (parent != nullptr) {
-            // Tìm và xóa mục
             for (auto it = parent->children.begin(); it != parent->children.end(); ++it) {
                 if ((*it)->name == name) {
                     parent->children.erase(it);
                     break;
                 }
             }
-            // Cập nhật lại số trang của các mục con
             updatePagesAfterDeletion(parent);
         }
     }
 
-    // In ra thông tin về cuốn sách (các mục con)
     void printBook(Node* node, int level = 0) {
         for (int i = 0; i < level; i++) {
-            cout << "  ";  // Thêm khoảng trắng để tạo dạng cây
+            cout << "  ";
         }
         cout << node->name << " (Pages: " << node->start_page << " - " << node->end_page << ")\n";
         for (Node* child : node->children) {
@@ -120,17 +110,14 @@ public:
         }
     }
 
-    // Hàm gọi từ bên ngoài để in ra thông tin cuốn sách
     void printBook() {
         printBook(root);
     }
 };
 
-// Main function
 int main() {
     Book myBook("My Book");
 
-    // Thêm các chương và mục con
     myBook.addSection("My Book", "Chapter 1", 1, 20);
     myBook.addSection("Chapter 1", "Section 1.1", 1, 10);
     myBook.addSection("Chapter 1", "Section 1.2", 11, 20);
@@ -145,7 +132,6 @@ int main() {
 
     cout << "\nLongest Chapter: " << myBook.findLongestChapter() << endl;
 
-    // Xóa một mục và in lại cuốn sách
     myBook.deleteSection("Section 1.1");
     cout << "\nBook Structure after deletion of 'Section 1.1':\n";
     myBook.printBook();
